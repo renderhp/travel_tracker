@@ -30,8 +30,8 @@ export default function TravelTable({ countryName, playersInCountry }) {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell align="left" sx={{ maxWidth: '100px' }}>ID</TableCell>
-                        <TableCell align="left" sx={{ maxWidth: '100px' }}>Name</TableCell>
+                        <TableCell align="left">ID</TableCell>
+                        <TableCell align="left">Name</TableCell>
                         <TableCell align="center">Status</TableCell>
                     </TableRow>
                 </TableHead>
@@ -41,8 +41,24 @@ export default function TravelTable({ countryName, playersInCountry }) {
                             key={row.id}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                            <TableCell align="left" sx={{ maxWidth: '100px' }}>{row.id}</TableCell>
-                            <TableCell align="left" sx={{ maxWidth: '100px' }}>{row.name}</TableCell>
+                            <TableCell align="left">{row.id}</TableCell>
+                            <TableCell align="left">
+                                <Typography
+                                    component="a"
+                                    href={`https://www.torn.com/profiles.php?XID=${row.id}`} // Change this to your desired URL
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{
+                                        color: 'primary.main', // Theme color for links
+                                        textDecoration: 'none', // Remove underline
+                                        '&:hover': {
+                                            textDecoration: 'underline', // Underline on hover
+                                        },
+                                    }}
+                                >
+                                    {row.name}
+                                </Typography>
+                            </TableCell>
                             <TableCell align="center" style={{ color: getColor(row.color) }}>{row.status}</TableCell>
                         </TableRow>
                     ))}
