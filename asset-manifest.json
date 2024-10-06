@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/travel_tracker/static/css/main.f855e6bc.css",
+    "main.js": "/travel_tracker/static/js/main.cd4391fe.js",
+    "static/js/453.dff1fd37.chunk.js": "/travel_tracker/static/js/453.dff1fd37.chunk.js",
+    "index.html": "/travel_tracker/index.html",
+    "main.f855e6bc.css.map": "/travel_tracker/static/css/main.f855e6bc.css.map",
+    "main.cd4391fe.js.map": "/travel_tracker/static/js/main.cd4391fe.js.map",
+    "453.dff1fd37.chunk.js.map": "/travel_tracker/static/js/453.dff1fd37.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f855e6bc.css",
+    "static/js/main.cd4391fe.js"
+  ]
+}
