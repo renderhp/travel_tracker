@@ -129,7 +129,7 @@ function App() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Box margin={2}>
-        <h2>EPIC Mafia Travel Tracker</h2>
+        <h2>EPIC Mafia Travel Tracker (v0.1)</h2>
         <Stack spacing={5}>
           <Stack direction="row" spacing={2}>
             <TextField
