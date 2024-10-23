@@ -116,7 +116,7 @@ export default function ProfileStats() {
     return (
         <Box margin={2}>
             <Stack direction="row" alignItems="center">
-                <h2 style={{ margin: 0 }}>Profile Stats</h2>
+                <h2 style={{ margin: 0 }}>Profile Stats (v0.1)</h2>
                 <Tooltip title="TODO LOL. Trust me, bro, it works :)" arrow>
                     <HelpOutlineIcon style={{ marginLeft: 8, cursor: 'pointer' }} />
                 </Tooltip>
