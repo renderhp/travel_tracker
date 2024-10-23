@@ -27,12 +27,12 @@ export default function TravelTable({ countryName, playersInCountry }) {
     }
     const table = (
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <Table aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell align="left">ID</TableCell>
-                        <TableCell align="left">Name</TableCell>
-                        <TableCell align="center">Status</TableCell>
+                        <TableCell align="left" sx={{ width: '100px' }}>ID</TableCell>
+                        <TableCell align="left" sx={{ width: '100px' }}>Name</TableCell>
+                        <TableCell align="center" sx={{ flexGrow: 1 }}>Status</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -41,8 +41,8 @@ export default function TravelTable({ countryName, playersInCountry }) {
                             key={row.id}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                            <TableCell align="left">{row.id}</TableCell>
-                            <TableCell align="left">
+                            <TableCell align="left" sx={{ width: '100px' }}>{row.id}</TableCell>
+                            <TableCell align="left" sx={{ width: '100px' }}>
                                 <Typography
                                     component="a"
                                     href={`https://www.torn.com/profiles.php?XID=${row.id}`} // Change this to your desired URL
@@ -59,7 +59,9 @@ export default function TravelTable({ countryName, playersInCountry }) {
                                     {row.name}
                                 </Typography>
                             </TableCell>
-                            <TableCell align="center" style={{ color: getColor(row.color) }}>{row.status}</TableCell>
+                            <TableCell align="center" sx={{ flexGrow: 1, color: getColor(row.color) }}>
+                                {row.status}
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
