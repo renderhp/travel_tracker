@@ -33,7 +33,7 @@ function Sidebar() {
             >
                 <Divider />
                 <List>
-                    <ListItem button="true" component={Link} to="/travel_tracker">
+                    <ListItem button="true" component={Link} to="/">
                         <ListItemIcon sx={{ minWidth: 40 }}><ConnectingAirportsIcon sx={{ color: 'white' }} /></ListItemIcon>
                         <ListItemText primary="Air Traffic Control" sx={{ color: 'white' }} />
                     </ListItem>
