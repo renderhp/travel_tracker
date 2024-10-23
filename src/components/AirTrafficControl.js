@@ -170,7 +170,7 @@ export default function AirTrafficControl() {
 
     return (
         <Box margin={2}>
-            <h2>EPIC Mafia Air Traffic Control (v0.1)</h2>
+            <h2>EPIC Mafia Air Traffic Control (v0.2)</h2>
             <Stack spacing={5}>
                 <Stack direction="row" spacing={2}>
                     <TextField
