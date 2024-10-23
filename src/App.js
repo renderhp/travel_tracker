@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import AirTrafficControl from './components/AirTrafficControl';
 import Sidebar from './components/Sidebar';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ProfileStats from './components/ProfileStats';
 
 const darkTheme = createTheme({
   palette: {
@@ -25,6 +26,7 @@ function App() {
           <Box flexGrow={1}>
             <Routes>
               <Route path="/" element={<AirTrafficControl />} />
+              <Route path="/profile_stats" element={<ProfileStats />} />
               {/* <Route path="/other-page" element={<OtherPage />} /> */}
             </Routes>
           </Box>

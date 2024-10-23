@@ -33,11 +33,11 @@ function Sidebar() {
             >
                 <Divider />
                 <List>
-                    <ListItem button component={Link} to="/">
+                    <ListItem button="true" component={Link} to="/">
                         <ListItemIcon sx={{ minWidth: 40 }}><ConnectingAirportsIcon sx={{ color: 'white' }} /></ListItemIcon>
                         <ListItemText primary="Air Traffic Control" sx={{ color: 'white' }} />
                     </ListItem>
-                    <ListItem button component={Link} to="/profile_stats">
+                    <ListItem button="true" component={Link} to="/profile_stats">
                         <ListItemIcon sx={{ minWidth: 40 }}><BarChartIcon sx={{ color: 'white' }} /></ListItemIcon>
                         <ListItemText primary="Profile Stats" sx={{ color: 'white' }} />
                     </ListItem>
