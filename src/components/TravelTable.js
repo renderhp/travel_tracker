@@ -10,10 +10,11 @@ import Paper from '@mui/material/Paper';
 import { Stack, Collapse, IconButton, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'; // Import an icon for a better look
+import TimeAgo from 'react-timeago';
 
 
 export default function TravelTable({ countryName, playersInCountry }) {
-    console.log(playersInCountry)
+    // console.log(playersInCountry)
     const [open, setOpen] = React.useState(true); // State to manage the collapse
     const getColor = (color) => {
         if (color === "blue") {
@@ -33,6 +34,7 @@ export default function TravelTable({ countryName, playersInCountry }) {
                         <TableCell align="left" sx={{ width: '100px' }}>ID</TableCell>
                         <TableCell align="left" sx={{ width: '100px' }}>Name</TableCell>
                         <TableCell align="center" sx={{ flexGrow: 1 }}>Status</TableCell>
+                        <TableCell align="right" sx={{ width: '100px' }}>Last Change</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -62,6 +64,7 @@ export default function TravelTable({ countryName, playersInCountry }) {
                             <TableCell align="center" sx={{ flexGrow: 1, color: getColor(row.color) }}>
                                 {row.status}
                             </TableCell>
+                            <TableCell align="right" sx={{ width: '100px' }}>{row.last_status_change > 0 ? <TimeAgo date={row.last_status_change} /> : "N/A"}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

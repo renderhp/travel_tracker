@@ -13,6 +13,14 @@ export default function AirTrafficControl() {
     const [factionData, setFactionData] = useState({})
     const [isFirstRefresh, setIsFirstRefresh] = useState(true)
     const [lastUpdateTime, setLastUpdateTime] = useState(null); // New state for last update time
+    const [lastPlayerStatus, setLastPlayerStatus] = useState({});
+    const [lastRegisteredUpdate, setLastRegisteredUpdate] = useState({});
+
+    const kStatusInCountry = 1
+    const kStatusTravelling = 2
+    const kStatusReturning = 3
+    const kStatusInHospital = 4
+    const kStatusUnknown = -1
 
     useEffect(() => {
         const filterPlayersByCountry = (players) => {
@@ -49,6 +57,7 @@ export default function AirTrafficControl() {
             players.forEach((player) => {
                 for (const [country, substrings] of Object.entries(countryMap)) {
                     if (substrings.some(substring => player.status.toLowerCase().includes(substring.toLowerCase()))) {
+
                         if (!filteredPlayers[country]) {
                             filteredPlayers[country] = [];
                         }
@@ -72,9 +81,36 @@ export default function AirTrafficControl() {
                 }
             });
 
-            console.log(sortedFilteredPlayers)
             return sortedFilteredPlayers;
         };
+
+        const getPlayerStatusDict = (api_result) => {
+            const res = {}
+            api_result.forEach((player, index) => {
+                // console.log(player)
+                res[player.id] = getGenericStatus(player)
+            })
+            return res
+        }
+
+        const getGenericStatus = (status) => {
+            if (status.description.includes("Okay")) {
+                return kStatusInCountry
+            }
+            if (status.description.includes("In ") && status.color === "red") {
+                return kStatusInHospital
+            }
+            if (status.description.includes("In ") && status.color === "blue") {
+                return kStatusInCountry
+            }
+            if (status.description.includes("Traveling")) {
+                return kStatusTravelling
+            }
+            if (status.description.includes("Returning")) {
+                return kStatusReturning
+            }
+            return kStatusUnknown
+        }
 
         let interval;
         if (isTracking) {
@@ -82,13 +118,30 @@ export default function AirTrafficControl() {
                 const api_link = `https://api.torn.com/faction/${factionId}?selections=&key=${apiToken}`
                 const response = await axios.get(api_link)
                 const result = Object.entries(response.data.members).map(([key, value]) => {
+                    // console.log(lastPlayerStatus[key])
+                    // console.log(getGenericStatus(value.status))
+                    // console.log("====")
                     return {
                         id: key,
                         name: value.name,
                         status: value.status.description,
+                        description: value.status.description,
                         color: value.status.color,
+                        current_generic_status: getGenericStatus(value.status),
+                        last_generic_status: lastPlayerStatus[key],
+                        last_status_change: getGenericStatus(value.status) === lastPlayerStatus[key]
+                            ? lastRegisteredUpdate[key]
+                            : Date.now()
                     };
                 })
+                const newPlayerStatus = getPlayerStatusDict(result)
+                const newLastRegisteredUpdate = {}
+                result.forEach((player, index) => {
+                    newLastRegisteredUpdate[player.id] = player.last_status_change
+                })
+                // console.log(result)
+                setLastPlayerStatus(newPlayerStatus)
+                setLastRegisteredUpdate(newLastRegisteredUpdate)
 
                 // for each country get a list of people in there by filtering status with substrings provided in the countryMap
                 const filteredResults = filterPlayersByCountry(result)
@@ -100,7 +153,7 @@ export default function AirTrafficControl() {
         }
         // Cleanup interval when component unmounts or when tracking stops
         return () => clearInterval(interval);
-    }, [isTracking, apiToken, factionId, isFirstRefresh]);
+    }, [isTracking, apiToken, factionId, isFirstRefresh, kStatusUnknown, lastPlayerStatus, lastRegisteredUpdate]);
 
     const handleStartClick = () => {
         if (factionId.length === 0 || apiToken.length === 0) {
@@ -144,7 +197,6 @@ export default function AirTrafficControl() {
                 <Stack spacing={2}>
                     {Object.keys(factionData).map((countryName) => {
                         const players = factionData[countryName]
-                        console.log(players)
                         return <TravelTable key={countryName} countryName={countryName} playersInCountry={players} />
                     }
                     )}
