@@ -25,7 +25,7 @@ function App() {
           {/* Main content */}
           <Box flexGrow={1}>
             <Routes>
-              <Route path="/" element={<AirTrafficControl />} />
+              <Route path="/travel_tracker" element={<AirTrafficControl />} />
               <Route path="/profile_stats" element={<ProfileStats />} />
               {/* <Route path="/other-page" element={<OtherPage />} /> */}
             </Routes>
