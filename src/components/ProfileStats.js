@@ -13,7 +13,32 @@ export default function ProfileStats() {
     const [loading, setLoading] = useState(false);
 
     const downloadExcel = (data) => {
-        const worksheet = XLSX.utils.json_to_sheet(data);
+        const formattedData = data.map(item => {
+            return {
+                "Player ID": item["Player ID"], // Keep as plain text
+                "Name": item["Name"], // Keep as plain text
+                "Profile Link": {
+                    l: {
+                        Target: item["Profile Link"], // URL for the link
+                        Tooltip: 'Click to view profile' // Optional tooltip
+                    },
+                    v: `${item["Profile Link"]}` // Display value
+                },
+                "Level": item["Level"], // Keep as plain text
+                "Attacks Won": item["Attacks Won"], // Keep as plain text
+                "Xanax Taken": item["Xanax Taken"], // Keep as plain text
+                "Elo": item["Elo"], // Keep as plain text
+                "Ranked War Hits": item["Ranked War Hits"], // Keep as plain text
+                "Energy Drinks Used": item["Energy Drinks Used"], // Keep as plain text
+                "Stat Enhancers Used": item["Stat Enhancers Used"], // Keep as plain text
+                "Time played (days)": item["Time played (days)"], // Keep as plain text
+                "Refills": item["Refills"], // Keep as plain text
+                "Merits Bought": item["Merits Bought"], // Keep as plain text
+                "Days Been Donator": item["Days Been Donator"], // Keep as plain text
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(formattedData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
@@ -57,12 +82,20 @@ export default function ProfileStats() {
                     console.log(stats)
                     res.push(
                         {
-                            "player_id": basic.player_id,
-                            "name": basic.name,
-                            "level": basic.level,
-                            "active_streak": stats.activestreak,
-                            "xanax_taken": stats.xantaken,
-                            "attacks_won": stats.attackswon,
+                            "Player ID": basic.player_id,
+                            "Name": basic.name,
+                            "Profile Link": `https://www.torn.com/profiles.php?XID=${basic.player_id}`,
+                            "Level": basic.level,
+                            "Attacks Won": stats.attackswon,
+                            "Xanax Taken": stats.xantaken,
+                            "Elo": stats.elo,
+                            "Ranked War Hits": stats.rankedwarhits,
+                            "Energy Drinks Used": stats.energydrinkused,
+                            "Stat Enhancers Used": stats.statenhancersused,
+                            "Time played (days)": (stats.useractivity / 60 / 60 / 24).toFixed(2),
+                            "Refills": stats.refills,
+                            "Merits Bought": stats.meritsbought,
+                            "Days Been Donator": stats.daysbeendonator,
                         }
                     )
                     // Update current iteration (if needed)
