@@ -34,7 +34,7 @@ export default function AirTrafficControl() {
                 "Switzerland": ["Switzerland", "Swiss"],
                 "Japan": ["Japan"],
                 "China": ["Chin"],
-                "UAE": ["UAE"],
+                "UAE": ["UAE", "Emirat"],
                 "South Africa": ["Africa"],
                 "Torn": ["Okay", "In hospital for"],
             }
