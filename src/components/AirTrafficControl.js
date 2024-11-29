@@ -131,7 +131,11 @@ export default function AirTrafficControl() {
                         last_generic_status: lastPlayerStatus[key],
                         last_status_change: getGenericStatus(value.status) === lastPlayerStatus[key]
                             ? lastRegisteredUpdate[key]
-                            : Date.now()
+                            : Date.now(),
+                        last_action: value.last_action.relative,
+                        online_status: value.last_action.status,
+                        level: value.level
+
                     };
                 })
                 const newPlayerStatus = getPlayerStatusDict(result)
