@@ -83,8 +83,10 @@ export default function TravelTable({ countryName, playersInCountry }) {
                                         },
                                     }}
                                 >
-                                    {row.name} <br /> ({row.level})
+                                    {row.name} ({row.level})
                                 </Typography>
+                                <br />
+                                ID: {row.id}
                             </TableCell>
                             <TableCell align="center" sx={{ flexGrow: 1, color: getColor(row.color) }}>
                                 {row.status}
