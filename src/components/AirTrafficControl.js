@@ -7,8 +7,12 @@ import Stack from '@mui/material/Stack';
 import { Box } from '@mui/material';
 
 export default function AirTrafficControl() {
-    const [factionId, setFactionId] = useState('')
-    const [apiToken, setApiToken] = useState('')
+    const [factionId, setFactionId] = useState(() =>
+        localStorage.getItem("factionId") || ''
+    )
+    const [apiToken, setApiToken] = useState(() =>
+        localStorage.getItem("apiToken") || ''
+    )
     const [isTracking, setIsTracking] = useState(false)
     const [factionData, setFactionData] = useState({})
     const [isFirstRefresh, setIsFirstRefresh] = useState(true)
@@ -182,14 +186,20 @@ export default function AirTrafficControl() {
                         label="Faction ID"
                         variant="standard"
                         value={factionId}
-                        onChange={(e) => setFactionId(e.target.value)}
+                        onChange={(e) => {
+                            localStorage.setItem('factionId', e.target.value);
+                            setFactionId(e.target.value);
+                        }}
                     />
                     <TextField
                         id="standard-basic"
                         label="API Key"
                         variant="standard"
                         value={apiToken}
-                        onChange={(e) => setApiToken(e.target.value)}
+                        onChange={(e) => {
+                            localStorage.setItem('apiToken', e.target.value);
+                            setApiToken(e.target.value);
+                        }}
                     />
                     <Button variant="contained" onClick={handleStartClick}>{isTracking ? "Stop" : "Start"}</Button>
                     {lastUpdateTime && (
