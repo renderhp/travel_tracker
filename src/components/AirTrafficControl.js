@@ -72,7 +72,14 @@ export default function AirTrafficControl() {
             });
 
             for (const country in filteredPlayers) {
-                filteredPlayers[country].sort((a, b) => b.status.localeCompare(a.status));
+                filteredPlayers[country].sort((a, b) => {
+                    if (a.current_generic_status === kStatusInHospital
+                        && b.current_generic_status === kStatusInHospital) {
+                        return compareHospitalTimers(a.description, b.description);
+                    }
+                    return b.status.localeCompare(a.status)
+                }
+                );
             }
 
             // Create a sorted object based on the custom order
@@ -88,10 +95,29 @@ export default function AirTrafficControl() {
             return sortedFilteredPlayers;
         };
 
+        const compareHospitalTimers = (a, b) => {
+            function parseTime(str) {
+                const regex = /(\d+) hrs?|(\d+) mins?|(\d+) secs?/g;
+                let match;
+                let totalSeconds = 0;
+
+                while ((match = regex.exec(str)) !== null) {
+                    if (match[1]) totalSeconds += parseInt(match[1]) * 3600; // hours
+                    if (match[2]) totalSeconds += parseInt(match[2]) * 60; // minutes
+                    if (match[3]) totalSeconds += parseInt(match[3]); // seconds
+                }
+
+                return totalSeconds;
+            }
+
+            const timeA = parseTime(a);
+            const timeB = parseTime(b);
+            return timeA - timeB;
+        }
+
         const getPlayerStatusDict = (api_result) => {
             const res = {}
             api_result.forEach((player, index) => {
-                // console.log(player)
                 res[player.id] = getGenericStatus(player)
             })
             return res
@@ -122,9 +148,6 @@ export default function AirTrafficControl() {
                 const api_link = `https://api.torn.com/faction/${factionId}?selections=&key=${apiToken}`
                 const response = await axios.get(api_link)
                 const result = Object.entries(response.data.members).map(([key, value]) => {
-                    // console.log(lastPlayerStatus[key])
-                    // console.log(getGenericStatus(value.status))
-                    // console.log("====")
                     return {
                         id: key,
                         name: value.name,
@@ -138,8 +161,7 @@ export default function AirTrafficControl() {
                             : Date.now(),
                         last_action: value.last_action.relative,
                         online_status: value.last_action.status,
-                        level: value.level
-
+                        level: value.level,
                     };
                 })
                 const newPlayerStatus = getPlayerStatusDict(result)
@@ -147,7 +169,6 @@ export default function AirTrafficControl() {
                 result.forEach((player, index) => {
                     newLastRegisteredUpdate[player.id] = player.last_status_change
                 })
-                // console.log(result)
                 setLastPlayerStatus(newPlayerStatus)
                 setLastRegisteredUpdate(newLastRegisteredUpdate)
 
@@ -178,7 +199,7 @@ export default function AirTrafficControl() {
 
     return (
         <Box margin={2}>
-            <h2>EPIC Mafia Air Traffic Control (v0.4)</h2>
+            <h2>EPIC Mafia Air Traffic Control (v0.5)</h2>
             <Stack spacing={5}>
                 <Stack direction="row" spacing={2}>
                     <TextField
