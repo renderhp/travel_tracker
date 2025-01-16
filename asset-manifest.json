@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/travel_tracker/static/css/main.ea115245.css",
-    "main.js": "/travel_tracker/static/js/main.10662c5d.js",
+    "main.js": "/travel_tracker/static/js/main.f9c4a09c.js",
     "static/js/453.dff1fd37.chunk.js": "/travel_tracker/static/js/453.dff1fd37.chunk.js",
     "index.html": "/travel_tracker/index.html",
     "main.ea115245.css.map": "/travel_tracker/static/css/main.ea115245.css.map",
-    "main.10662c5d.js.map": "/travel_tracker/static/js/main.10662c5d.js.map",
+    "main.f9c4a09c.js.map": "/travel_tracker/static/js/main.f9c4a09c.js.map",
     "453.dff1fd37.chunk.js.map": "/travel_tracker/static/js/453.dff1fd37.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ea115245.css",
-    "static/js/main.10662c5d.js"
+    "static/js/main.f9c4a09c.js"
   ]
 }
