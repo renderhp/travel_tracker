@@ -38,6 +38,17 @@ export default function TravelTable({ countryName, playersInCountry }) {
         return status
     }
 
+    const customFormatter = (value, unit, suffix, epochMilliseconds, nextFormatter) => {
+        if (unit === 'minute' || unit === 'second') {
+            return `${value} ${unit}${value !== 1 ? 's' : ''} ${suffix}`;
+        }
+        if (unit === 'hour') {
+            const minutesAgo = Math.floor((Date.now() - epochMilliseconds) / 60000) % 60;
+            return `${value} hr${value !== 1 ? 's' : ''} ${minutesAgo} min${minutesAgo !== 1 ? 's' : ''} ${suffix}`;
+        }
+        return nextFormatter(value, unit, suffix);
+    };
+
     const table = (
         <TableContainer component={Paper}>
             <Table aria-label="simple table">
@@ -94,7 +105,7 @@ export default function TravelTable({ countryName, playersInCountry }) {
                             <TableCell align="center" sx={{ width: "10%" }}>
                                 <span style={{ color: getStatusColor(row.online_status) }}> {row.online_status}  <br /> {row.last_action} </span>
                             </TableCell>
-                            <TableCell align="left" >{row.last_status_change > 0 ? <TimeAgo date={row.last_status_change} /> : "N/A"}</TableCell>
+                            <TableCell align="left" >{row.last_status_change > 0 ? <TimeAgo date={row.last_status_change} formatter={customFormatter} /> : "N/A"}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
