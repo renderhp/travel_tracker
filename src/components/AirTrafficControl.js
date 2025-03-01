@@ -5,11 +5,15 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { Box } from '@mui/material';
+import { useSearchParams } from 'react-router-dom';
+
 
 export default function AirTrafficControl() {
-    const [factionId, setFactionId] = useState(() =>
-        localStorage.getItem("factionId") || ''
-    )
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const initialFactionId = searchParams.get("factionId") || localStorage.getItem("factionId") || '';
+    const [factionId, setFactionId] = useState(initialFactionId);
+
     const [apiToken, setApiToken] = useState(() =>
         localStorage.getItem("apiToken") || ''
     )
@@ -199,7 +203,7 @@ export default function AirTrafficControl() {
 
     return (
         <Box margin={2}>
-            <h2>EPIC Mafia Air Traffic Control (v0.6)</h2>
+            <h2>EPIC Mafia Air Traffic Control (v0.7)</h2>
             <Stack spacing={5}>
                 <Stack direction="row" spacing={2}>
                     <TextField
@@ -209,6 +213,7 @@ export default function AirTrafficControl() {
                         value={factionId}
                         onChange={(e) => {
                             localStorage.setItem('factionId', e.target.value);
+                            setSearchParams({ factionId: e.target.value });
                             setFactionId(e.target.value);
                         }}
                     />
