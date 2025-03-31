@@ -6,7 +6,22 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { Box } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
+import { sendNotification, requestNotificationPermission } from './../utils/notificationUtils'
 
+const COUNTRY_ORDER = [
+    "Mexico",
+    "Cayman Islands",
+    "Canada",
+    "Hawaii",
+    "United Kingdom",
+    "Argentina",
+    "Switzerland",
+    "Japan",
+    "China",
+    "UAE",
+    "South Africa",
+    "Torn",
+]
 
 export default function AirTrafficControl() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -23,6 +38,26 @@ export default function AirTrafficControl() {
     const [lastUpdateTime, setLastUpdateTime] = useState(null); // New state for last update time
     const [lastPlayerStatus, setLastPlayerStatus] = useState({});
     const [lastRegisteredUpdate, setLastRegisteredUpdate] = useState({});
+
+    const loadNotificationsState = () => {
+        const savedState = localStorage.getItem('countryNotificationsState');
+        return savedState ? JSON.parse(savedState) : COUNTRY_ORDER.reduce((acc, country) => {
+            acc[country] = false;
+            return acc;
+        }, {});
+    };
+
+    const [countryNotificationsState, setCountryNotificationsState] = useState(loadNotificationsState());
+
+    const handleNotificationsChange = (country) => (event) => {
+        const newState = {
+            ...countryNotificationsState,
+            [country]: event.target.checked,
+        };
+        setCountryNotificationsState(newState);
+        localStorage.setItem('countryNotificationsState', JSON.stringify(newState));
+        requestNotificationPermission();
+    };
 
     const kStatusInCountry = 1
     const kStatusTravelling = 2
@@ -46,20 +81,6 @@ export default function AirTrafficControl() {
                 "South Africa": ["Africa"],
                 "Torn": ["Okay", "In hospital for"],
             }
-            const countryOrder = [
-                "Mexico",
-                "Cayman Islands",
-                "Canada",
-                "Hawaii",
-                "United Kingdom",
-                "Argentina",
-                "Switzerland",
-                "Japan",
-                "China",
-                "UAE",
-                "South Africa",
-                "Torn",
-            ]
             const filteredPlayers = {};
 
             players.forEach((player) => {
@@ -88,7 +109,7 @@ export default function AirTrafficControl() {
 
             // Create a sorted object based on the custom order
             const sortedFilteredPlayers = {};
-            countryOrder.forEach(country => {
+            COUNTRY_ORDER.forEach(country => {
                 if (filteredPlayers[country]) {
                     sortedFilteredPlayers[country] = filteredPlayers[country];
                 } else {
@@ -178,6 +199,21 @@ export default function AirTrafficControl() {
 
                 // for each country get a list of people in there by filtering status with substrings provided in the countryMap
                 const filteredResults = filterPlayersByCountry(result)
+                Object.entries(filteredResults).forEach(([countryName, players]) => {
+                    if (!countryNotificationsState[countryName]) {
+                        return;
+                    }
+
+                    players.forEach((player) => {
+                        if (player.current_generic_status === kStatusTravelling
+                            && player.last_generic_status != null
+                            && player.current_generic_status !== player.last_generic_status
+                        ) {
+                            sendNotification(`${player.name} [${player.id}]`, player.description, `https://www.torn.com/profiles.php?XID=${player.id}`);
+                        }
+                    })
+
+                })
 
                 setIsFirstRefresh(false);
                 setFactionData(filteredResults);
@@ -203,7 +239,7 @@ export default function AirTrafficControl() {
 
     return (
         <Box margin={2}>
-            <h2>EPIC Mafia Air Traffic Control (v0.7)</h2>
+            <h2>EPIC Mafia Air Traffic Control (v0.8)</h2>
             <Stack spacing={5}>
                 <Stack direction="row" spacing={2}>
                     <TextField
@@ -237,7 +273,15 @@ export default function AirTrafficControl() {
                 <Stack spacing={2}>
                     {Object.keys(factionData).map((countryName) => {
                         const players = factionData[countryName]
-                        return <TravelTable key={countryName} countryName={countryName} playersInCountry={players} />
+                        return (
+                            <TravelTable
+                                key={countryName}
+                                countryName={countryName}
+                                playersInCountry={players}
+                                notificationsEnabled={countryNotificationsState[countryName]}
+                                onNotificationsChange={handleNotificationsChange(countryName)}
+                            />
+                        )
                     }
                     )}
                 </Stack>

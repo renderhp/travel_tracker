@@ -7,13 +7,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Stack, Collapse, IconButton, Typography } from '@mui/material';
+import { Stack, Collapse, IconButton, Typography, Checkbox, FormControlLabel } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'; // Import an icon for a better look
 import TimeAgo from 'react-timeago';
 
 
-export default function TravelTable({ countryName, playersInCountry }) {
+export default function TravelTable({ countryName, playersInCountry, notificationsEnabled, onNotificationsChange }) {
     // console.log(playersInCountry)
     const [open, setOpen] = React.useState(true); // State to manage the collapse
     const getColor = (color) => {
@@ -120,12 +120,21 @@ export default function TravelTable({ countryName, playersInCountry }) {
                 borderRadius: 1, // Optional: to make corners rounded
             }}>
             <Stack spacing={1}>
-                <h3>
-                    <IconButton onClick={() => setOpen(!open)}>
-                        <ExpandMoreIcon />
-                    </IconButton>
-                    {countryName}
-                </h3>
+                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
+                    <Box display="flex" alignItems="center">
+                        <IconButton onClick={() => setOpen(!open)}>
+                            <ExpandMoreIcon />
+                        </IconButton>
+                        <Typography variant="h6" sx={{ marginLeft: 1 }}>
+                            {countryName}
+                        </Typography>
+                    </Box>
+                    <FormControlLabel
+                        control={<Checkbox checked={notificationsEnabled} onChange={onNotificationsChange} />}
+                        label="Notify"
+                        sx={{ marginLeft: 'auto' }} // Ensures checkbox aligns right
+                    />
+                </Box>
                 <Collapse in={open}>
                     {playersInCountry.length > 0
                         ? table
